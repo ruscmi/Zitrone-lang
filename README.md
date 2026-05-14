@@ -7,7 +7,7 @@ this interpreter is a continuation of lmnlang, but already in C, here I use a ha
 # Logo
 
 <p align="center">
-  <img src="logoz.jpg width="200">">
+  <img src="logoz.jpg" width="200">
 </p>
 
 logo create in ibispaint 
