@@ -19,5 +19,9 @@ please do not judge for minor erroneous typos in the code, or in the comments, I
 # Installation 
 ```bash
 git clone https://github.com/ruscmi/Zitrone-lang
-cd Zitrone```
-
+cd Zitrone
+```
+compiling a file
+```bash
+gcc mama.c -o zitrone
+```
