@@ -87,7 +87,7 @@ int main() {
 			    	count_variab++;
 			    }
             }
-		    printf("%f\n",res); // выводим 
+		    printf("%f",res); // выводим 
 		}
 		else if(strcmp (command, "hilfe") == 0) {
 			printf("== ZITRONE PL COMMANDS ==\ndruck - print for gods(druck hello,smirnow)\nerstellen - create a popka(erstellen x 10)\nberech - math logic(berech 10 + 10 and conclusion res)\n");
