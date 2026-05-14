@@ -3,7 +3,7 @@
 #include <string.h> // для работы со строками
 #include <stdbool.h> // для флагов
 
-bool active = true; // флаг 
+bool active = true; // флаг для работы цикла
 bool found_f_name = false; // флаг для того что бы искать переменные в памяти
 int main() {
     // мой основной буфер
@@ -55,13 +55,13 @@ int main() {
 	           found_f_name = false;
 	   		    for(int i = 0; i  < count_variab; i++ ) {
 					if(strcmp(memory[i].name,f_name) == 0) { // если находим выводим
-				        printf("%s",memory[i].val);
+				        printf("%s ",memory[i].val);
 					    found_f_name = true; // ставим found_f_name в активное состояние для поиска
 						break;
 					}
 				}
 				if(!found_f_name) { // если нет выводим то что было напечатано в f_name
-					printf("%s",f_name);
+					printf("%s ",f_name);
 				}
 				f_name  = strtok(NULL, " "); // попка три попки четыре попки
 			}
