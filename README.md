@@ -11,3 +11,7 @@ this interpreter is a continuation of lmnlang, but already in C, here I use a ha
 </p>
 
 logo create in ibispaint 
+
+lol well, what can I say, I plan to make this interpreter faster and fix my past mistakes. Most likely it will be difficult, given that I plan to use a true hash function. Perhaps someone will help me with this, but I can't say anything for sure
+
+please do not judge for minor erroneous typos in the code, or in the comments, I have been writing code for 4 days, in fact, it is not particularly easy to switch from convenient C++ to pure C
