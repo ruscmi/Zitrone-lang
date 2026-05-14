@@ -1,12 +1,12 @@
 # Zitrone-lang
 this interpreter is a continuation of lmnlang, but already in C, here I use a hash table, I try to allocate an adequate amount of memory for everything and write everything with comments (they are in Russian, since it is convenient for me).
-<p align="center">
+<p align="left">
   <img src="bannerz.jpg" width="700">
 </p>
 
 # Logo
 
-<p align="center">
+<p align="left">
   <img src="logoz.jpg" width="200">
 </p>
 
