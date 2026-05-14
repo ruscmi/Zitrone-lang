@@ -25,3 +25,7 @@ compiling a file
 ```bash
 gcc mama.c -o zitrone
 ```
+start a file
+```bash
+./zitrone
+```
