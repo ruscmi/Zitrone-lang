@@ -1,31 +1,51 @@
-# Zitrone-lang
-this interpreter is a continuation of lmnlang, but already in C, here I use a hash table, I try to allocate an adequate amount of memory for everything and write everything with comments (they are in Russian, since it is convenient for me).
-<p align="left">
-  <img src="bannerz.jpg" width="700">
+# Zitrone-lang 🍋
+**Zitrone-lang** is a fast and lightweight interpreter written in pure C. It is the successor to the `lmnlang` project, redesigned with a focus on performance, the use of hash tables, and proper memory management.
+
+<p align="center">
+	<img src="assets/media/banner_1280x593.jpg" width="100%" alt="Zitrone Banner">
 </p>
 
-# Logo
+## About project
+Switching from C++ to pure C allowed us to make the interpreter more responsive and portable.
+*	**Hash Table:** Used for quick access to variables.
+*	**Strong Logic:** Type support (Int, Double, String, Bool) via `union`.
+*	**Dual Mode:** Works as an interactive console (REPL) or by running `.zit` files.
 
-<p align="left">
-  <img src="logoz.jpg" width="200">
+<p align="center">
+	<img src="assets/media/logo_1280x1280.jpg" width="150" alt="Zitrone Logo">
 </p>
 
-logo create in ibispaint 
+## Run locally
 
-lol well, what can I say, I plan to make this interpreter faster and fix my past mistakes. Most likely it will be difficult, given that I plan to use a true hash function. Perhaps someone will help me with this, but I can't say anything for sure
+1. **Clone repo:**
+```bash
+git clone https://github.com/ruscmi/Zitrone-lang.git && cd Zitrone-lang
+```
 
-please do not judge for minor erroneous typos in the code, or in the comments, I have been writing code for 4 days, in fact, it is not particularly easy to switch from convenient C++ to pure C
+2. **Build project**
+```bash
+chmod +x build.sh
+./build.sh
+```
 
-# Installation 
+## Using
+
+### REPL Mode (Interactive)
 ```bash
-git clone https://github.com/ruscmi/Zitrone-lang Zitrone
-cd Zitrone
+./ZitroneLang-Interpreter
 ```
-compiling a file
+
+### Run file
 ```bash
-gcc mama.c -o zitrone
+./ZitroneLang-Interpreter --file path/to/file.zit
 ```
-start a file
-```bash
-./zitrone
-```
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Authors
+
+- [@ruscmi](https://github.com/ruscmi/)
+- [@voncov](https://github.com/voncov/)
