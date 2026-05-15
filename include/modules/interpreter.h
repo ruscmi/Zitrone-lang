@@ -25,6 +25,7 @@
 */
 #ifndef MODULES_INTERPRETER_H
 #define MODULES_INTERPRETER_H
+#include <stdint.h>
 #pragma once
 
 #pragma region Includes
@@ -35,6 +36,7 @@
 #pragma region Preprocessors
 #define VAR_MAX_NAME_LEN 256
 #define VAR_MAX_VALUE_LEN 256
+#define HASH_TABLE_SIZE 1024
 #define VAR_MAX_MEM_LEN 8096
 #pragma endregion
 
@@ -57,11 +59,14 @@ typedef struct ZITVariable {
 } zitvar_t;
 
 struct Interpreter {
+    zitvar_t* table[HASH_TABLE_SIZE];
     zitvar_t mem[VAR_MAX_MEM_LEN];
     size_t vars_size;
     bool active;
 };
 
+uint64_t ZIT__hash(const char *str);
+double ZIT__get_num_value(const char* token);
 int ZIT__process_line(char* input);
 int ZIT__cli();
 int ZIT__runner(const char* file_path);

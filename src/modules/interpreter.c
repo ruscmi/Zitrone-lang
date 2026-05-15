@@ -23,6 +23,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
+#include <stdint.h>
 #pragma region Includes
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,16 +35,48 @@
 static bool initialized = false;
 static struct Interpreter zit = {0};
 
+
 static zitvar_t* find_var(const char* name) {
-    for (size_t i = 0; i < zit.vars_size; i++) {
-        if (strcmp(zit.mem[i].name, name) == 0) {
-            return &zit.mem[i];
+    uint64_t hash = ZIT__hash(name);
+    for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+        uint64_t idx = (hash + i) % HASH_TABLE_SIZE;
+        if (zit.table[idx] == NULL) {
+            return NULL;
+        }
+        if (strcmp(zit.table[idx]->name, name) == 0) {
+            return zit.table[idx];
         }
     }
     return NULL;
 }
 
+uint64_t ZIT__hash(const char *str) {
+    uint64_t hash = 5381;
+    int c;
+    while ((c = *str++)) {
+        hash = ((hash << 5) + hash) + c;
+    }
+    return hash % HASH_TABLE_SIZE;
+}
+
+double ZIT__get_num_value(const char* token) {
+    zitvar_t* var = find_var(token);
+    if (var != NULL) {
+        if (var->type == VAR_DOUBLE) {
+            return var->value.d_val;
+        }
+        if (var->type == VAR_INT) {
+            return (double)var->value.i_val;
+        }
+    }
+    return atof(token);
+}
+
 int ZIT__process_line(char* input) {
+    if (zit.vars_size >= VAR_MAX_MEM_LEN) {
+        fprintf(stderr, "ERROR: Memory is full");
+        return 1;
+    }
     if (input == NULL || input[0] == '\0' || input[0] == '#') {
         return 0;
     }
@@ -67,9 +100,22 @@ int ZIT__process_line(char* input) {
             if (var == NULL) {
                 var = &zit.mem[zit.vars_size++];
                 strncpy(var->name, name, VAR_MAX_NAME_LEN);
+                uint64_t h = ZIT__hash(name);
+                for (int i = 0; i < HASH_TABLE_SIZE; i++) {
+                    uint64_t idx = (h + i) % HASH_TABLE_SIZE;
+                    if (zit.table[idx] == NULL) {
+                        zit.table[idx] = var;
+                        break;
+                    }
+                }
             }
-            var->type = VAR_STRING;
-            strncpy(var->value.s_val, val, VAR_MAX_VALUE_LEN);
+            if (val[0] >= '0' && val[0] <= '9') {
+                var->type = VAR_DOUBLE;
+                var->value.d_val = atof(val);
+            } else {
+                var->type = VAR_STRING;
+                strncpy(var->value.s_val, val, VAR_MAX_VALUE_LEN);
+            }
             printf("k(%s)<%p> = v(%s)<%p>\n", var->name, var->name, var->value.s_val, var->value.s_val);
         } else {
             fprintf(stderr, "name & value is null\n");
@@ -82,8 +128,8 @@ int ZIT__process_line(char* input) {
         char* b_val = strtok(NULL, " ");
         zitvar_t* var = NULL;
         if (a_val != NULL && op_val != NULL && b_val != NULL) {
-            double a_n_val = atof(a_val);
-            double b_n_val = atof(b_val);
+            double a_n_val = ZIT__get_num_value(a_val);
+            double b_n_val = ZIT__get_num_value(b_val);
             double result = 0;
             char n_op_val = op_val[0];
 
@@ -117,6 +163,7 @@ int ZIT__process_line(char* input) {
             if (var == NULL) {
                 var = &zit.mem[zit.vars_size++];
                 strcpy(var->name, "res");
+                zit.table[ZIT__hash("res")] = var;
             }
             var->type = VAR_DOUBLE;
             var->value.d_val = result;
