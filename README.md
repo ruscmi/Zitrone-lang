@@ -32,11 +32,13 @@ chmod +x build.sh
 
 ### REPL Mode (Interactive)
 ```bash
+cd build
 ./ZitroneLang-Interpreter
 ```
 
 ### Run file
 ```bash
+cd build
 ./ZitroneLang-Interpreter --file path/to/file.zit
 ```
 
