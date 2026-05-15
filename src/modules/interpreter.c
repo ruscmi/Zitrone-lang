@@ -70,10 +70,10 @@ int ZIT__process_line(char* input) {
             }
             var->type = VAR_STRING;
             strncpy(var->value.s_val, val, VAR_MAX_VALUE_LEN);
+            printf("k(%s)<%p> = v(%s)<%p>\n", var->name, var->name, var->value.s_val, var->value.s_val);
         } else {
             fprintf(stderr, "name & value is null\n");
         }
-        printf("k(%s)<%p> = v(%s)<%p>\n", var->name, var->name, var->value.s_val, var->value.s_val);
     }
     // CMD: berech <a_value> <operation> <b_value>
     else if (strcmp(cmd, "berech") == 0) {
