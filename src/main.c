@@ -64,6 +64,7 @@ static struct CLIOptions CLI__parse_args(int argc, char** argv) {
 #pragma endregion
 
 int main(int argc, char** argv) {
+    ZIT__init();
     if (argc == 1) {
         return ZIT__cli();
     }

@@ -32,10 +32,7 @@
 
 #pragma region Interpreter
 static bool initialized = false;
-static struct Interpreter zit = {
-    .vars_size = 0,
-    .active = true,
-};
+static struct Interpreter zit = {0};
 
 static zitvar_t* find_var(const char* name) {
     for (size_t i = 0; i < zit.vars_size; i++) {
@@ -191,6 +188,12 @@ int ZIT__runner(const char* file_path) {
         ZIT__process_line(line);
     }
     fclose(f);
+    return 0;
+}
+
+int ZIT__init() {
+    zit.vars_size = 0;
+    zit.active = true;
     return 0;
 }
 #pragma endregion
