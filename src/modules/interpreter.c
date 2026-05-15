@@ -106,6 +106,7 @@ int ZIT__process_line(char* input) {
                         break;
                     }
                     result = a_n_val / b_n_val;
+                    break;
                 }
                 default: {
                     fprintf(stderr, "Invalid math operation\n");
