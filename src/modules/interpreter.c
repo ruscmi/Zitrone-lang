@@ -50,6 +50,8 @@ static zitvar_t* find_var(const char* name) {
     return NULL;
 }
 
+
+
 uint64_t ZIT__hash(const char *str) {
     uint64_t hash = 5381;
     int c;
@@ -170,6 +172,45 @@ int ZIT__process_line(char* input) {
             printf("result<%p>(%s) = %f\n", var, var->name, var->value.d_val);
         }
     }
+    // CMD: wenn <var> <arg> <var2> wenn empire == petyx
+    else if(strcmp(cmd,"wenn") == 0) {
+        if(!zit.active_logic) {
+        	return 0;
+        }
+        char *a_val = strtok(NULL, " ");
+        char *op_val = strtok(NULL, " ");
+        char *b_val = strtok(NULL, " ");
+        if(a_val != NULL && op_val != NULL && b_val != NULL ) {
+	        double rw = ZIT__get_num_value(a_val);
+	        double lw = ZIT__get_num_value(b_val);
+	        bool res = false;
+
+	        if(strcmp(op_val, "==") == 0) {
+	        	res = (rw == lw);
+	        }
+	        else if(strcmp(op_val, "!=") == 0) {
+	        	res = (rw != lw);
+	        }
+	        else if(strcmp(op_val, "<=") == 0) {
+	        	res = (rw <= lw);
+	        }
+	        else if(strcmp(op_val, ">=") == 0) {
+	        	res = (rw => lw);
+	        }
+	        zit.active_logic = res;
+	        zit.met = res;
+	    }
+    }
+    else if (strcmp(cmd, "ende") == 0) {
+    	zit.active_logic = true;
+    }
+    else if (strcmp(cmd, "ansonsten") == 0) {
+    	if(zit.met == false) {
+    		zit.active_logic = true;
+    	}else {
+    	    zit.active_logic = false;
+    	}
+    }
     // CMD: druck <arg1> <arg2> ...
     else if (strcmp(cmd, "druck") == 0) {
         char* arg = strtok(NULL, " ");
@@ -242,6 +283,7 @@ int ZIT__runner(const char* file_path) {
 int ZIT__init() {
     zit.vars_size = 0;
     zit.active = true;
+    zit.met = false;
     return 0;
 }
 #pragma endregion
