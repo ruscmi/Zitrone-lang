@@ -195,7 +195,7 @@ int ZIT__process_line(char* input) {
 	        	res = (rw <= lw);
 	        }
 	        else if(strcmp(op_val, ">=") == 0) {
-	        	res = (rw => lw);
+	        	res = (rw >= lw);
 	        }
 	        zit.active_logic = res;
 	        zit.met = res;
