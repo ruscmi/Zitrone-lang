@@ -63,6 +63,8 @@ struct Interpreter {
     zitvar_t mem[VAR_MAX_MEM_LEN];
     size_t vars_size;
     bool active;
+    bool met;
+    bool active_logic;
 };
 
 uint64_t ZIT__hash(const char *str);
