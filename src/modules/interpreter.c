@@ -70,6 +70,9 @@ double ZIT__get_num_value(const char* token) {
         if (var->type == VAR_INT) {
             return (double)var->value.i_val;
         }
+        if(var->type == VAR_STRING) {
+        	return atof(var->value.s_val);
+        }
     }
     return atof(token);
 }
@@ -79,9 +82,21 @@ int ZIT__process_line(char* input) {
         fprintf(stderr, "ERROR: Memory is full");
         return 1;
     }
+    
     if (input == NULL || input[0] == '\0' || input[0] == '#') {
         return 0;
     }
+
+    char t_input[512];
+    strncpy(t_input,input,sizeof(t_input));
+    char* c_cmd = strtok(t_input, " ");
+
+    if(!zit.active_logic && c_cmd != NULL ) {
+    	if(strcmp(c_cmd,"ende") != 0 && strcmp(c_cmd,"ansonsten" )!= 0) {
+    		return 0;
+    	}
+    }
+    
     char* cmd = strtok(input, " ");
     if (cmd == NULL) {
         return 0;
@@ -172,31 +187,58 @@ int ZIT__process_line(char* input) {
             printf("result<%p>(%s) = %f\n", var, var->name, var->value.d_val);
         }
     }
-    // CMD: wenn <var> <arg> <var2> wenn empire == petyx
+    //CMD: eingabe <var> | eingabe x 
+    else if(strcmp(cmd, "eingabe") == 0) {
+    	char *inp_s = strtok(NULL, " ");
+    	if(inp_s != NULL) {
+    	    zitvar_t *inp = find_var(inp_s);
+    	    if(inp != NULL) {
+	    		printf("inp %s: ",inp_s);
+	    		fflush(stdout);
+	    	    inp->type = VAR_STRING;
+	    	    fgets(inp->value.s_val,VAR_MAX_VALUE_LEN,stdin);
+                inp->value.s_val[strcspn(inp->value.s_val,"\n")]='\0';
+	        }
+    	}
+    }
+    // CMD: wenn <var> <arg> <var2> | wenn empire == petyx
     else if(strcmp(cmd,"wenn") == 0) {
-        if(!zit.active_logic) {
-        	return 0;
-        }
         char *a_val = strtok(NULL, " ");
         char *op_val = strtok(NULL, " ");
         char *b_val = strtok(NULL, " ");
         if(a_val != NULL && op_val != NULL && b_val != NULL ) {
-	        double rw = ZIT__get_num_value(a_val);
-	        double lw = ZIT__get_num_value(b_val);
 	        bool res = false;
+            zitvar_t* a_var = find_var(a_val);
+            zitvar_t* b_var = find_var(b_val);
 
-	        if(strcmp(op_val, "==") == 0) {
-	        	res = (rw == lw);
-	        }
-	        else if(strcmp(op_val, "!=") == 0) {
-	        	res = (rw != lw);
-	        }
-	        else if(strcmp(op_val, "<=") == 0) {
-	        	res = (rw <= lw);
-	        }
-	        else if(strcmp(op_val, ">=") == 0) {
-	        	res = (rw >= lw);
-	        }
+            const char* a_str = a_var ? a_var->value.s_val : a_val;
+            const char* b_str = b_var ? b_var->value.s_val : b_val;
+
+            double rw = ZIT__get_num_value(a_val);
+            double lw = ZIT__get_num_value(b_val);
+
+            if(rw == 0 && lw == 0 && strcmp(a_str, "0") != 0 && strcmp(b_str, "0") != 0) {
+            	if(strcmp(op_val,"==") == 0) {
+            		res = (strcmp(a_str,b_str)==0);
+            	}
+            	else if(strcmp(op_val,"!=")==0) {
+            	    res = (strcmp(a_str,b_str) != 0);
+            	}
+            }
+            else {
+		        if(strcmp(op_val, "==") == 0) {
+		        	res = (rw == lw);
+		        }
+		        else if(strcmp(op_val, "!=") == 0) {
+		        	res = (rw != lw);
+		        }
+		        else if(strcmp(op_val, "<=") == 0) {
+		        	res = (rw <= lw);
+		        }
+		        else if(strcmp(op_val, ">=") == 0) {
+		        	res = (rw >= lw);
+		        }
+		    }
 	        zit.active_logic = res;
 	        zit.met = res;
 	    }
@@ -213,6 +255,9 @@ int ZIT__process_line(char* input) {
     }
     // CMD: druck <arg1> <arg2> ...
     else if (strcmp(cmd, "druck") == 0) {
+        if(!zit.active_logic) {
+        	return 0;
+        }
         char* arg = strtok(NULL, " ");
         zitvar_t* var = NULL;
         while (arg) {
@@ -283,6 +328,7 @@ int ZIT__runner(const char* file_path) {
 int ZIT__init() {
     zit.vars_size = 0;
     zit.active = true;
+    zit.active_logic = true;
     zit.met = false;
     return 0;
 }
