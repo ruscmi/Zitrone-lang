@@ -1,3 +1,5 @@
+# WARNING⚠️
+Hello, this project has been abandoned, further promotion will be in the repository https://github.com/ruscmi/LemonenLang
 # Zitrone-lang 🍋
 **Zitrone-lang** is a fast and lightweight interpreter written in pure C. It is the successor to the `lmnlang` project, redesigned with a focus on performance, the use of hash tables, and proper memory management.
 
